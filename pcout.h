@@ -1,5 +1,5 @@
 #pragma once
-#include <ostream>
+#include <sstream>
 #include <mutex>
 
 std::mutex coutLock;
@@ -28,5 +28,17 @@ public:
 	{
 		std::cout << fp;
 		return *this;
+	}
+};
+
+class pcout2 : public std::stringstream
+{
+public:
+	static inline std::mutex coutLock2;
+	~pcout2()
+	{
+		std::lock_guard<std::mutex> lock(coutLock2);
+		std::cout << rdbuf();
+		std::cout.flush();
 	}
 };
